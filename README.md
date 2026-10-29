@@ -11,7 +11,9 @@ más usada de Whisper para CPU/GPU, y en el SDK oficial de MCP para Python.
 
 | Herramienta | Qué hace |
 |---|---|
-| `transcribe(path, language?, model?, format?, save?)` | Transcribe un archivo local. Formatos: `timestamps` (por defecto), `text`, `srt`, `vtt`, `json`. Guarda el resultado junto al archivo. |
+| `transcribe(path, language?, model?, format?, save?, wait_seconds?)` | Inicia la transcripción en segundo plano. Si termina en `wait_seconds` (máx. 50) devuelve el texto; si no, devuelve un `job_id`. Formatos: `timestamps` (por defecto), `text`, `srt`, `vtt`, `json`. Guarda el resultado junto al archivo. |
+| `transcribe_status(job_id, wait_seconds?)` | Avance (etapa, porcentaje) y resultado final de un job. |
+| `list_jobs()` | Jobs de la sesión. |
 | `detect_language(path)` | Detecta el idioma hablado. |
 | `list_models()` | Lista modelos disponibles y el predeterminado. |
 
@@ -58,6 +60,13 @@ claude mcp add whisper -e WHISPER_MODEL=small -- uv run --script /ruta/a/whisper
 
 Guía rápida: `small` para CPU (español e inglés con buena calidad), `medium` o `large-v3-turbo`
 si tienes GPU NVIDIA o necesitas máxima precisión, `tiny`/`base` solo para pruebas.
+
+## Por qué en segundo plano
+
+Algunos clientes MCP (por ejemplo Claude Desktop cuando reenvía herramientas a una sesión
+remota) cortan las llamadas que pasan de ~60 s. Por eso `transcribe` devuelve enseguida un
+`job_id` cuando el archivo es largo o el modelo aún se está descargando, y Claude consulta
+`transcribe_status` hasta que termina. El archivo de salida se escribe igual aunque nadie consulte.
 
 ## Uso desde Claude
 
