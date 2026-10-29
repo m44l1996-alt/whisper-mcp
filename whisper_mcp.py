@@ -34,8 +34,8 @@ mcp = _Server("whisper")
 MODELS = ["tiny", "base", "small", "medium", "large-v3", "large-v3-turbo"]
 FORMATS = ("timestamps", "text", "srt", "vtt", "json")
 DEFAULT_MODEL = os.environ.get("WHISPER_MODEL", "small")
-DEVICE = os.environ.get("WHISPER_DEVICE", "auto")        # auto | cpu | cuda
-COMPUTE = os.environ.get("WHISPER_COMPUTE", "default")    # default | int8 | float16
+DEVICE = os.environ.get("WHISPER_DEVICE", "cpu")          # cpu | cuda (cuda exige las DLL de CUDA 12 + cuDNN instaladas)
+COMPUTE = os.environ.get("WHISPER_COMPUTE", "int8" if DEVICE == "cpu" else "float16")  # int8 | float16 | default
 
 _models: dict[str, object] = {}
 _models_lock = threading.Lock()

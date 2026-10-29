@@ -2,7 +2,7 @@
 
 Servidor MCP local que transcribe audio y video a texto para Claude Desktop y Claude Code.
 Funciona sin internet después de la primera descarga del modelo, no necesita API keys y
-corre en CPU (usa GPU NVIDIA automáticamente si hay CUDA disponible).
+corre en CPU por defecto; puede usar GPU NVIDIA si instalas CUDA 12 y cuDNN (`WHISPER_DEVICE=cuda`).
 
 Basado en [faster-whisper](https://github.com/SYSTRAN/faster-whisper), la implementación
 más usada de Whisper para CPU/GPU, y en el SDK oficial de MCP para Python.
@@ -55,11 +55,17 @@ claude mcp add whisper -e WHISPER_MODEL=small -- uv run --script /ruta/a/whisper
 | Variable | Valores | Predeterminado |
 |---|---|---|
 | `WHISPER_MODEL` | tiny, base, small, medium, large-v3, large-v3-turbo | small |
-| `WHISPER_DEVICE` | auto, cpu, cuda | auto |
-| `WHISPER_COMPUTE` | default, int8, float16 | default |
+| `WHISPER_DEVICE` | cpu, cuda | cpu |
+| `WHISPER_COMPUTE` | int8, float16, default | int8 en CPU, float16 en GPU |
 
 Guía rápida: `small` para CPU (español e inglés con buena calidad), `medium` o `large-v3-turbo`
 si tienes GPU NVIDIA o necesitas máxima precisión, `tiny`/`base` solo para pruebas.
+
+## GPU
+
+Por defecto corre en CPU, que funciona en cualquier equipo. Para usar una GPU NVIDIA hace falta
+tener instaladas las librerías de CUDA 12 y cuDNN 9 (si falta alguna, verás un error tipo
+`cublas64_12.dll is not found`); después pon `"WHISPER_DEVICE": "cuda"` en el bloque `env`.
 
 ## Por qué en segundo plano
 
