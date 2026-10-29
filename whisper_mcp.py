@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.10"
-# dependencies = ["mcp>=1.2", "faster-whisper>=1.1"]
+# dependencies = ["mcp>=1.2", "faster-whisper>=1.1", "av>=11,<16"]
 # ///
 """
 Whisper MCP: transcripción local de audio y video para Claude Desktop y Claude Code.
